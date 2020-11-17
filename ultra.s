@@ -15,14 +15,14 @@ ultra_setup:
 ultra_send:
     clrf   TRISD, A
     setf   PORTD, A    ; start pulse
-    movlw  0x0F
+    movlw  0x18        ; 5 us delay for sent pulse width
     movwf  delay2_count, A
     call   delay2
     clrf   PORTD, A
     return
 
 ultra_receive:
-    clrf   TRISD, A    ; set PORTD as input
+    setf   TRISD, A    ; set PORTD as input
     movlw  0xFF
     movwf  delay_count, A
     call   delay
