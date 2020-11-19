@@ -1,62 +1,72 @@
 #include <xc.inc>
 
-global  ultra_setup, ultra_send, ultra_receive, timer_low, timer_high   
+global  ultra_setup, ultra_send, ultra_receive, ultra_int_hi, timer_low1, timer_high1 
 extrn   sixteen_by_eight
     
 psect	udata_acs   ; reserve data space in access ram    
 delay_count: ds 1   ; reserve 1 byte for delay length
 delay2_count: ds 1
-timer_low: ds 1
-timer_high: ds 1
+timer_low1: ds 1
+timer_high1: ds 1
 	
 psect	detect_code,class=CODE
 
 ultra_setup:
-    clrf   TRISD, A    ; set PORTD as output
+    clrf    TRISE, A    ; set PORTE as output
+    banksel CCPTMRS2
+    bcf     C10TSEL0
+    movlw   00000100B   ; set CCP10 to falling edge
+    movwf   CCP10CON, A
     return
 
 ultra_send:
-    clrf   TRISD, A
-    setf   PORTD, A    ; start pulse
-    movlw  0x18        ; 5 us delay for sent pulse width
-    movwf  delay2_count, A
-    call   delay2
-    clrf   PORTD, A
+    clrf    TRISE, A
+    setf    PORTE, A    ; start pulse
+    movlw   0x18        ; 5 us delay for sent pulse width
+    movwf   delay2_count, A
+    call    delay2
+    clrf    PORTE, A
+    setf    TRISE, A    ; set PORTE as input
+    banksel PIE4
+    bsf     CCP10IE  ; enable CCP10 interrupt
     return
 
 ultra_receive:
-    setf   TRISD, A    ; set PORTD as input
-    movlw  0x00
-    call   check_pin
-    movlw  10000111B
-    movwf  T0CON, A
-    movlw  0x01
-    call   check_pin
-    movff  TMR0, timer_low, A
-    movff  TMR0H, timer_high, A
-    movlw  00000111B
-    movwf  T0CON, A
-    clrf   TMR0, A
-    clrf   TMR0H, A
-    movlw  0x0C
-    movwf  delay_count, A
-    call   delay
+    movlw   0x2F        ; 750 us delay for hold off time
+    movwf   delay_count, A
+    call    delay
+    movlw   00110011B   ; start TIMER1
+    movwf   T1CON, A
+    goto    $
+    
+ultra_post_int:
+    movlw   0x0C        ; 200 us delay before sending next pulse
+    movwf   delay_count, A
+    call    delay
     return
     
-check_pin:
-    cpfseq PORTD, A
-    return
-    bra    check_pin
+ultra_int_hi:
+    btfss   CCP10IF     ; check for CCP10 interrupt
+    retfie  f           ; if not CCP10, return
+    movff   TMR1, timer_low1, A
+    movff   TMR1H, timer_high1, A
+    movlw   00110010B   ; stop TIMER1
+    movwf   T1CON, A
+    clrf    TMR1, A
+    clrf    TMR1H, A
+    bcf     CCP10IF
+    bcf     PIE4, 7, A  ; disable CCP10 interrupt
+    goto    ultra_post_int
     
 delay:
-    movlw  0xFF
-    movwf  delay2_count, A
-    call   delay2
-    decfsz delay_count, A	; decrement until zero
-    bra	   delay
+    movlw   0xFF
+    movwf   delay2_count, A
+    call    delay2
+    decfsz  delay_count, A	; decrement until zero
+    bra	    delay
     return
     
 delay2:
-    decfsz delay2_count, A	; decrement until zero
-    bra	   delay2
+    decfsz  delay2_count, A	; decrement until zero
+    bra	    delay2
     return
