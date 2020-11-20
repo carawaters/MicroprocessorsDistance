@@ -23,6 +23,7 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
     <itemPath>README.md</itemPath>
+    <itemPath>LCD.s</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>.</Elem>

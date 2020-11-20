@@ -8,6 +8,8 @@ result_1: ds 1 ; most sig
 result_2: ds 1 ; mid sig
 result_3: ds 1 ; least sig
 mid: ds 1
+dec_1: ds 1
+dec_2: ds 1
     
 sixteen_by_eight:
     mulwf  timer_low1, A  ; need the 8 bit number in W
@@ -21,3 +23,9 @@ sixteen_by_eight:
     addwfc PRODH, W, A
     movwf  result_1, A
     return
+    
+hex_to_dec:
+    movlw  0x0A
+    mulwf  result_1, A
+    movff  PRODH, dec_1, A
+    mulwf  PRODH, A
