@@ -1,7 +1,7 @@
 	#include <pic18_chip_select.inc>
 	#include <xc.inc>
 
-extrn   ultra_setup, ultra_send, ultra_receive, ultra_int_hi   	
+extrn   ultra_setup, ultra_send, ultra_receive  	
 
 psect	udata_acs   ; reserve data space in access ram    
 delay_count: ds 1   ; reserve 1 byte for delay length	
@@ -12,12 +12,10 @@ main:
 	org	0x0
 	goto	start
 	
-int_hi:
-        org     0x0008	
-	goto    ultra_int_hi
-	
 	org	0x100		    ; Main code starts here at address 0x100
+
 start:
+        call    ultra_setup
 
 measure:
 	call    ultra_send
