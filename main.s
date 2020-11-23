@@ -25,6 +25,7 @@ measure:
 	call    ultra_send
 	call    ultra_receive
 	call    warn_LED
+	call    warn_buzzer
 	movlw   0xFF
 	movwf   delay_count, A
 	call    delay
