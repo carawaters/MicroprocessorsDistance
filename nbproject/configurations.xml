@@ -16,6 +16,8 @@
       <itemPath>main.s</itemPath>
       <itemPath>ultra.s</itemPath>
       <itemPath>mult.s</itemPath>
+      <itemPath>LCD.s</itemPath>
+      <itemPath>warn.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -23,7 +25,6 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
     <itemPath>README.md</itemPath>
-    <itemPath>LCD.s</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>.</Elem>
