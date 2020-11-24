@@ -14,14 +14,14 @@ warn_setup:
     return
     
 warn_buzzer:
-    movlw   0x17 
+    movlw   0x15 
     cpfsgt  result_1, A ; compare if greater than 1.5m
     goto    buzzer_on
     clrf    PORTB, A
     return
     
 warn_LED:
-    movlw   0x1F
+    movlw   0x1D
     cpfsgt  result_1, A ; compare if greater than 2m
     goto    LED_on
     clrf    PORTJ, A    ; clear PORTJ if greater
