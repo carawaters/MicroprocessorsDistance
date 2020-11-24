@@ -32,7 +32,7 @@ LED_on:
     return
     
 buzzer_on:
-    setf    PORTB, A
+    setf    PORTB, A    ; single pulse to buzzer for short sound
     movlw   0xFF
     movwf   delay_count, A
     call    delay

@@ -36,37 +36,34 @@ ultra_send:
     return
 
 ultra_receive:
-    movlw   0x2F        ; 750 us delay for hold off time
+    movlw   0x0F        ; 750 us delay for hold off time
     movwf   delay2_count, A
     call    delay2
     movlw   00111111B   ; start TIMER1
     movwf   T1CON, A
-    movlw   0x04
+    movlw   0x03        ; 18.6 ms delay for t_IN-MAX
     movwf   delay_count, A
     call    delay
-    movf    CCPR10, W, B
+    movf    CCPR10, W, B  ; measure timer low byte
     movwf   timer_low1, A
-    movf    CCPR10H, W, B
+    movf    CCPR10H, W, B ; measure timer high byte
     movwf   timer_high1, A
     movlw   00111110B   ; stop TIMER1
     movwf   T1CON, A
-    clrf    TMR1, A
+    clrf    TMR1, A     ; reset times to measure again
     clrf    TMR1H, A
     clrf    CCPR10, A
     clrf    CCPR10H, A
-    bcf     PIR4, 7, A
+    bcf     PIR4, 7, A      ; clear CCP10 interrupt
     bcf     PIE4, 7, A      ; disable CCP10 interrupt
     
 ultra_calc:
-    movlw   0x53
+    movlw   0x53            ; factor to multiply by
     call    sixteen_by_eight
-    movlw   0x0C        ; 200 us delay before sending next pulse
-    movwf   delay2_count, A
-    call    delay2
     return
     
 delay:
-    movlw   0xFF
+    movlw   0x80
     movwf   delay2_count, A
     call    delay2
     decfsz  delay_count, A	; decrement until zero

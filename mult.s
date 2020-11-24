@@ -23,9 +23,3 @@ sixteen_by_eight:
     addwfc PRODH, W, A
     movwf  result_1, A
     return
-    
-hex_to_dec:
-    movlw  0x0A
-    mulwf  result_1, A
-    movff  PRODH, dec_1, A
-    mulwf  PRODH, A
