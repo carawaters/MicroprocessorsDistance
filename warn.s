@@ -1,7 +1,7 @@
 #include <xc.inc>
 
 global   warn_setup, warn_buzzer, warn_LED
-extrn    result_1, result_2, result_3   
+extrn    result_1  
 
 psect	udata_acs   ; reserve data space in access ram   
 delay_count: ds 1

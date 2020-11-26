@@ -1,6 +1,6 @@
 #include <xc.inc>
 
-global sixteen_by_eight, result_1, result_2, result_3
+global sixteen_by_eight, result_1
 extrn  timer_low1, timer_high1
     
 psect	udata_acs   ; reserve data space in access ram    

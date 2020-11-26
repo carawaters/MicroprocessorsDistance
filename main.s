@@ -2,7 +2,6 @@
 	#include <xc.inc>
 
 extrn   ultra_setup, ultra_send, ultra_receive
-extrn   result_1, result_2, result_3
 extrn   warn_setup, warn_LED, warn_buzzer
 
 psect	udata_acs   ; reserve data space in access ram    

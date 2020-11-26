@@ -1,7 +1,7 @@
 #include <xc.inc>
 
 global  ultra_setup, ultra_send, ultra_receive, timer_low1, timer_high1 
-extrn   sixteen_by_eight, result_1, result_2, result_3
+extrn   sixteen_by_eight
     
 psect	udata_acs   ; reserve data space in access ram    
 delay_count: ds 1   ; reserve 1 byte for delay length
