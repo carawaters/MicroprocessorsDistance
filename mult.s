@@ -13,13 +13,13 @@ dec_2: ds 1
     
 sixteen_by_eight:
     mulwf  timer_low1, A  ; need the 8 bit number in W
-    movff  PROD, result_3, A
-    movff  PRODH, mid, A
+    movff  PROD, result_3, A ; least sig byte of lower mult
+    movff  PRODH, mid, A ; save most sig to add later
     mulwf  timer_high1, A
-    movf   PROD, W, A
+    movf   PROD, W, A    ; add most sig of lower mult and least sig of higher
     addwf  mid, W, A
     movwf  result_2, A
     movlw  0
-    addwfc PRODH, W, A
+    addwfc PRODH, W, A   ; account for carry of mid addition
     movwf  result_1, A
     return
